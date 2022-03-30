@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { setXYCordinatesOfNodeAInNegativeDirection, setXYCordinatesOfNodeAInPositiveDirection, setXYCordinatesOfNodeBInNegativeDirection, setXYCordinatesOfNodeBInPositiveDirection, increaseRatio, decreaseRatio, getMovableNodeRatio } from '../features/movableNodesSlice'
+import { getLinePoints, getMovableNodeRatio, setRatio } from '../features/movableNodesSlice'
 
 const ButtonComponent = () => {
     const dispatch = useDispatch()
+    const linePoints = useSelector(getLinePoints);
     const ratioBetweenTwoLines = useSelector(getMovableNodeRatio)
     return (
         <div
@@ -14,28 +15,22 @@ const ButtonComponent = () => {
             }}>
             <div className='d-flex flex-direction-row justify-content-between'>
                 <Button className="ms-2 bg-danger"
-                    onClick={() => dispatch(setXYCordinatesOfNodeAInPositiveDirection(20))}
-                >+</Button>
+                >x1: {linePoints.x1}</Button>
                 <Button className="ms-2 bg-danger"
-                    onClick={() => dispatch(setXYCordinatesOfNodeAInNegativeDirection(20))}
-                >-</Button>
-                <Button className="ms-2 bg-success"
-                    onClick={() => dispatch(decreaseRatio(20))}
                 >
-                    -</Button>
+                    y1: {linePoints.y1}</Button>
                 <Button className="ms-2 bg-success"
-                    onClick={() => dispatch(increaseRatio(20))}
                 >
-                    +</Button>
+                    x2: {linePoints.x2}</Button>
+                <Button className="ms-2 bg-success"
+                >y2: {linePoints.y2}</Button>
                 <Button className="ms-2 bg-dark"
-                    onClick={() => dispatch(setXYCordinatesOfNodeBInPositiveDirection(20))}
-                >+</Button>
+                >
+                    x3: {linePoints.x3}</Button>
                 <Button className="ms-2 bg-dark"
-                    onClick={() => dispatch(setXYCordinatesOfNodeBInNegativeDirection(20))}
-                >-</Button>
-
-
-                <Button className="ms-2">Ratio between Two lines is {ratioBetweenTwoLines}</Button>
+                >y3: {linePoints.y3}</Button>
+                <Button className="ms-2"
+                >Ratio between Two lines is {ratioBetweenTwoLines}</Button>
             </div>
         </div>
 
