@@ -22,7 +22,7 @@ const movableNodesSlice = createSlice({
             state.linePoints.x1 = action.payload.xPos
             state.linePoints.y1 = action.payload.yPos
             state.linePoints.x2 = ( state.ratio * state.linePoints.x3 + state.linePoints.x1 ) / ( 1 + state.ratio )
-            state.linePoints.y2 = ( state.ratio * state.linePoints.y3 + state.linePoints.y1 ) / ( 1 + state.ratio )
+            // state.linePoints.y2 = ( state.ratio * state.linePoints.y3 + state.linePoints.y1 ) / ( 1 + state.ratio )
             // state.linePoints.y2 = action.payload.yPos
         },
         setXYCordinatesOfNodeB: (state, action) => {
@@ -33,7 +33,7 @@ const movableNodesSlice = createSlice({
             state.linePoints.x3 = action.payload.xPos
             state.linePoints.y3 = action.payload.yPos
             state.linePoints.x2 = ( state.ratio * state.linePoints.x3 + state.linePoints.x1 ) / ( 1 + state.ratio )
-            state.linePoints.y2 = ( state.ratio * state.linePoints.y3 + state.linePoints.y1 ) / ( 1 + state.ratio )
+            // state.linePoints.y2 = ( state.ratio * state.linePoints.y3 + state.linePoints.y1 ) / ( 1 + state.ratio )
             // state.linePoints.y2 = action.payload.yPos
         },
         setRatio: (state) => {
