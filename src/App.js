@@ -10,7 +10,7 @@ import {
   setXYCordinatesOfNodeA,
   setXYCordinatesOfNodeB,
   setXYCordinatesOfNodeC,
-  getMovableNodeRatio, getLinePoints, setRatio
+  getMovableNodeRatio, getLinePoints, setRatio, getMovableNodeYRatio
 } from "../src/features/movableNodesSlice";
 import ButtonComponent from './components/ButtonComponent'
 
@@ -18,6 +18,7 @@ const App = () => {
   const linePoints = useSelector(getLinePoints);
   const dispatch = useDispatch()
   const ratioBetweenTwoLines = useSelector(getMovableNodeRatio);
+  const ratioBetweenTwoLinesinYDirection = Math.abs( useSelector( getMovableNodeYRatio ) );
   console.log("ratioBetweenTwoLines", ratioBetweenTwoLines);
   const dragStartRed = (e) => {
     const { x, y } = e.target.getStage().getPointerPosition();
@@ -66,7 +67,7 @@ const App = () => {
                     points={[
                       linePoints.x1,
                       linePoints.y1,
-                      (ratioBetweenTwoLines * linePoints.x3 + linePoints.x1) / (1 + ratioBetweenTwoLines),
+                      linePoints.x2,
                       linePoints.y2
                     ]}
                     stroke="#777777"
@@ -74,7 +75,7 @@ const App = () => {
                   />
                   <Line
                     points={[
-                      (ratioBetweenTwoLines * linePoints.x3 + linePoints.x1) / (1 + ratioBetweenTwoLines),
+                      linePoints.x2,
                       linePoints.y2,
                       linePoints.x3,
                       linePoints.y3,
@@ -93,7 +94,7 @@ const App = () => {
                     onDragEnd={(e) => dragStartRed(e)}
                   />
                   <Circle
-                    x={(ratioBetweenTwoLines * linePoints.x3 + linePoints.x1) / (1 + ratioBetweenTwoLines)}
+                    x={ linePoints.x2 }
                     y={linePoints.y2}
                     radius={10}
                     fill="green"

@@ -31,6 +31,16 @@ const ButtonComponent = () => {
                 >y3: {linePoints.y3}</Button>
                 <Button className="ms-2"
                 >Ratio between Two lines is {ratioBetweenTwoLines}</Button>
+                <Button className="ms-2"
+                >Ratio between Two lines is { ( linePoints.y2 - linePoints.y1 ) / ( linePoints.y3 - linePoints.y2 ) }</Button>
+                {/* <Button className="ms-2 bg-danger"
+                >x difference: { linePoints.x2 - linePoints.x1 }</Button>
+                <Button className="ms-2 bg-black"
+                >x difference: { linePoints.x3 - linePoints.x2 }</Button> */}
+                {/* <Button className="ms-2 bg-danger"
+                >x2 : { ( ratioBetweenTwoLines * linePoints.x3 + linePoints.x1 ) / ( 1 + ratioBetweenTwoLines ) }</Button>
+                <Button className="ms-2 bg-black"
+                >y2 : { ( ratioBetweenTwoLines * linePoints.y3 + linePoints.y1 ) / ( 1 + ratioBetweenTwoLines ) }</Button> */}
             </div>
         </div>
 

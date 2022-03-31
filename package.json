@@ -2,7 +2,6 @@
   "name": "konva",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://ganeshdimri71.github.io/movable-nodes-original",
   "dependencies": {
     "@reduxjs/toolkit": "^1.8.0",
     "@testing-library/jest-dom": "^5.16.3",
