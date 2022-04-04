@@ -1,12 +1,13 @@
 import React from 'react'
 import { Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
-import { getLinePoints, getMovableNodeRatio, setRatio } from '../features/movableNodesSlice'
+import { getLinePoints, getMovableNodeRatio, setRatio, setXYCordinatesOfNodeBasedOnCordinate, getMovableLineYCordinate } from '../features/movableNodesSlice'
 
 const ButtonComponent = () => {
     const dispatch = useDispatch()
     const linePoints = useSelector(getLinePoints);
-    const ratioBetweenTwoLines = useSelector(getMovableNodeRatio)
+    const ratioBetweenTwoLines = useSelector( getMovableNodeRatio )
+    const getMovableLineYCordinateFromRedux = useSelector( getMovableLineYCordinate );
     return (
         <div
             style={{
@@ -23,7 +24,7 @@ const ButtonComponent = () => {
                 >
                     x2: {linePoints.x2}</Button>
                 <Button className="ms-2 bg-success"
-                >y2: {linePoints.y2}</Button>
+                >y2: { getMovableLineYCordinateFromRedux}</Button>
                 <Button className="ms-2 bg-dark"
                 >
                     x3: {linePoints.x3}</Button>
@@ -31,8 +32,8 @@ const ButtonComponent = () => {
                 >y3: {linePoints.y3}</Button>
                 <Button className="ms-2"
                 >Ratio between Two lines is {ratioBetweenTwoLines}</Button>
-                <Button className="ms-2"
-                >Ratio between Two lines is { ( linePoints.y2 - linePoints.y1 ) / ( linePoints.y3 - linePoints.y2 ) }</Button>
+                {/* <Button className="ms-2"
+                >Ratio between Two lines is { ( linePoints.y2 - linePoints.y1 ) / ( linePoints.y3 - linePoints.y2 ) }</Button> */}
                 {/* <Button className="ms-2 bg-danger"
                 >x difference: { linePoints.x2 - linePoints.x1 }</Button>
                 <Button className="ms-2 bg-black"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useSelector,
   useDispatch,
@@ -10,27 +10,59 @@ import {
   setXYCordinatesOfNodeA,
   setXYCordinatesOfNodeB,
   setXYCordinatesOfNodeC,
-  getMovableNodeRatio, getLinePoints, setRatio, getMovableNodeYRatio
+  getLinePoints, setRatio, setXYCordinatesOfNodeCBasedOnOffset, getMovableLineYCordinate, setYcordinateOfMovableNode
 } from "../src/features/movableNodesSlice";
 import ButtonComponent from './components/ButtonComponent'
 
 const App = () => {
   const linePoints = useSelector(getLinePoints);
+  const getMovableLineYCordinateFromRedux = useSelector( getMovableLineYCordinate );
   const dispatch = useDispatch()
-  const ratioBetweenTwoLines = useSelector(getMovableNodeRatio);
-  const ratioBetweenTwoLinesinYDirection = Math.abs( useSelector( getMovableNodeYRatio ) );
-  console.log("ratioBetweenTwoLines", ratioBetweenTwoLines);
-  const dragStartRed = (e) => {
+  const [ dragStartPos, setDragStartPos ] = useState( [] )
+  const dragStartRed = ( e ) => {
     const { x, y } = e.target.getStage().getPointerPosition();
+    setDragStartPos( [ x, y ] );
     dispatch(
       setXYCordinatesOfNodeA({
         xPos: x,
         yPos: y,
       })
     );
-    // dispatch(setRatio())
   };
-  const dragStartGreen = (e) => {
+  const dragMoveRed = ( e ) => {
+    const { x, y } = e.target.getStage().getPointerPosition();
+    const offset_y = ( y - dragStartPos[ 1 ] )
+    console.log( 'offset_y', offset_y )
+    dispatch(
+      setXYCordinatesOfNodeA( {
+        xPos: x,
+        yPos: y,
+      } )
+    );
+    dispatch(
+      setXYCordinatesOfNodeCBasedOnOffset( {
+        offset_y: offset_y
+      } )
+    );
+
+  };
+
+  const dragEndRed = ( e ) => {
+    const { x, y } = e.target.getStage().getPointerPosition();
+    const YcordinateOfMovableNodes = getMovableLineYCordinateFromRedux
+    dispatch(
+      setXYCordinatesOfNodeA( {
+        xPos: x,
+        yPos: y,
+      } )
+    );
+    dispatch(
+      setYcordinateOfMovableNode( {
+        YcordinateOfMovableNodes: YcordinateOfMovableNodes
+      } )
+    );
+  }
+  const dragStartMoveEndGreen = ( e ) => {
     const { x, y } = e.target.getStage().getPointerPosition();
     dispatch(
       setXYCordinatesOfNodeB({
@@ -40,15 +72,46 @@ const App = () => {
     );
     dispatch(setRatio())
   };
-  const dragStartBlack = (e) => {
+  const dragStartBlack = ( e ) => {
     const { x, y } = e.target.getStage().getPointerPosition();
+    setDragStartPos( [ x, y ] );
     dispatch(
-      setXYCordinatesOfNodeC({
+      setXYCordinatesOfNodeC( {
         xPos: x,
         yPos: y,
       })
     );
   };
+  const dragMoveBlack = ( e ) => {
+    const { x, y } = e.target.getStage().getPointerPosition();
+    const offset_y = ( y - dragStartPos[ 1 ] )
+    dispatch(
+      setXYCordinatesOfNodeC( {
+        xPos: x,
+        yPos: y,
+      } )
+    );
+    dispatch(
+      setXYCordinatesOfNodeCBasedOnOffset( {
+        offset_y: offset_y
+      } )
+    );
+  };
+  const dragEndBlack = ( e ) => {
+    const { x, y } = e.target.getStage().getPointerPosition();
+    const YcordinateOfMovableNodes = getMovableLineYCordinateFromRedux
+    dispatch(
+      setXYCordinatesOfNodeC( {
+        xPos: x,
+        yPos: y,
+      } )
+    );
+    dispatch(
+      setYcordinateOfMovableNode( {
+        YcordinateOfMovableNodes: YcordinateOfMovableNodes
+      } )
+    );
+  }
 
 
   return (
@@ -68,7 +131,7 @@ const App = () => {
                       linePoints.x1,
                       linePoints.y1,
                       linePoints.x2,
-                      linePoints.y2
+                      getMovableLineYCordinateFromRedux 
                     ]}
                     stroke="#777777"
                     strokeWidth={2}
@@ -76,7 +139,7 @@ const App = () => {
                   <Line
                     points={[
                       linePoints.x2,
-                      linePoints.y2,
+                      getMovableLineYCordinateFromRedux,
                       linePoints.x3,
                       linePoints.y3,
                     ]}
@@ -89,19 +152,23 @@ const App = () => {
                     radius={10}
                     fill="red"
                     draggable
-                    onDragStart={(e) => dragStartRed(e)}
-                    onDragMove={(e) => dragStartRed(e)}
-                    onDragEnd={(e) => dragStartRed(e)}
+                    onDragStart={ ( e ) => {
+                      dragStartRed( e )
+                    } }
+                    onDragMove={ ( e ) => {
+                      dragMoveRed( e )
+                    } }
+                    onDragEnd={ ( e ) => dragEndRed( e ) }
                   />
                   <Circle
                     x={ linePoints.x2 }
-                    y={linePoints.y2}
+                    y={ getMovableLineYCordinateFromRedux }
                     radius={10}
                     fill="green"
                     draggable
-                    onDragStart={(e) => dragStartGreen(e)}
-                    onDragMove={(e) => dragStartGreen(e)}
-                    onDragEnd={(e) => dragStartGreen(e)}
+                    onDragStart={ ( e ) => dragStartMoveEndGreen( e ) }
+                    onDragMove={ ( e ) => dragStartMoveEndGreen( e ) }
+                    onDragEnd={ ( e ) => dragStartMoveEndGreen( e ) }
                   />
                   <Circle
                     x={linePoints.x3}
@@ -109,11 +176,15 @@ const App = () => {
                     radius={10}
                     fill="black"
                     draggable
-                    onDragStart={(e) => dragStartBlack(e)}
-                    onDragMove={(e) => dragStartBlack(e)}
-                    onDragEnd={(e) => dragStartBlack(e)}
+                    onDragStart={ ( e ) => {
+                      dragStartBlack( e )
+
+                    } }
+                    onDragMove={ ( e ) => {
+                      dragMoveBlack( e )
+                    } }
+                    onDragEnd={ ( e ) => dragEndBlack( e ) }
                   />
-                  {/* Movable Node Circle */}
                 </Group>
               </Layer>
             </Provider>
